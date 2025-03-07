@@ -7,6 +7,26 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
+    <nav>
+      <div class="nav-wrapper teal" style="padding-left: 10px;">
+         <a href="#!" class="brand-logo">Ajax Demo</a>
+      </div>
+    </nav>
+    <main class="row" style="padding: 40px">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Website</th>
+          </tr>
+        </thead>
+        <tbody id="tableResult">
+        </tbody>
+      </table>
+    </main>
+
     <h1>My Page</h1>
 
     <input type="button" id="alertBtn" value="alert" onclick="alertFun()"/>
@@ -16,9 +36,109 @@
     <span id="result"></span>
 
     <script>
+      function alertFun(){
+        alert("Hello !");
+      }
 
+      function confirmFun(){
+        let didConfirm = confirm("Are you sure about that?");
+        if(didConfirm){
+          alert("You confirmed :)");
+        }else{
+          alert("You did not confirm :(");
+        }
+      }
 
+      function promptFun(){
+        let val = prompt("What is your name?");
+        alert(`You've entered: ${val}`);
+      }
     </script>
-    <script src="script.js"></script>
+    
+    <script>
+      // Get client data using navigator
+      console.log(window.navigator.cookieEnabled);
+      console.log(window.navigator.onLine);
+      console.log(navigator.appVersion);
+      console.log(navigator.userAgent);
+      console.log(navigator.platform);
+
+      // Get window metadata using window
+      console.log(window.location.href); // Get full URL
+      console.log(window.location.protocol);
+      console.log(window.location.hostname);
+
+      function redirect(url){
+        window.location.assign(url); // Redirects the page to another URL
+      }
+
+      window.onload = function(event){
+        console.log("Page has loaded");
+      }
+    </script>
+    
+    <script>
+      const result = document.querySelector('#result');
+      result.innerHTML = '<h2>My Span</h2>';
+      result.style.color = 'blue';
+    </script>
+
+    <input id="myBtn" type="button" onclick="myFun()" value="Click me"/>
+    
+    <script>
+      function myFun(){
+        alert("hello");  
+      }
+
+      function myFun2(){
+        console.log("myFun2 called");
+      }
+
+      function logEventType(event){
+        console.log(event.type);
+      }
+
+      let myBtn = document.querySelector("#myBtn");
+      myBtn.addEventListener("click", myFun2);
+      myBtn.addEventListener("mouseover", logEventType);
+      myBtn.addEventListener("mouseout", logEventType);
+    </script>
+
+    <script>
+      function drawTable(records){
+        let tableResult = document.querySelector('#tableResult');
+        let html = '';
+        for(let record of records){
+            html += `<tr>
+              <td>${record.id}</td>
+              <td>${record.name}</td>
+              <td>${record.brewery_type}</td>
+              <td><a href="${record.website_url}" target="_blank">${record.website_url}</a></td>    
+            </tr>`;
+        }
+        tableResult.innerHTML = html;
+      }
+
+      // Testing the function
+      drawTable([{
+        id: 1,
+        name: "Bob's Brewery",
+        brewery_type: "fire",
+        website_url: "https://bobs.com"
+      }]);
+
+      async function getData(url){
+        try{
+          let response = await fetch(url);
+          let result = await response.json();
+          drawTable(result);
+        }catch(e){
+          console.log(e);
+        }
+      }
+
+      getData("https://api.openbrewerydb.org/breweries/search?query=harry");
+    </script>
   </body>
 </html>
+
